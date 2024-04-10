@@ -1,0 +1,122 @@
+Task 1:
+					1.1
+1. 
+g++ -g marks.cpp -o marks.out
+./marks.out
+
+output: Floating point exception
+
+-g: Flag makes code ready to run under a code inspector like gdb or valgrind. It turns on the debugger
+
+
+2.
+gdb marks.out
+
+3.
+Error: Program received signal SIGFPE, Arithmetic exception
+Line 17
+Values: a = -2, b= 0
+
+4.
+(gdb) list
+
+B+>Line 17     return ((double)(a / b)) * 100; 
+The error is in line 17
+
+5.
+(gdb) backtrace
+#0  0x0000555555555204 in improve (a=-2, b=0) at marks.cpp:17
+#1  0x00005555555551dd in main () at marks.cpp:11
+
+The backtrace cmd shows two frames(#0 and #1), aswell as the function name and arguements.
+
+6.
+(gdb) up
+#1  0x00005555555551dd in main () at marks.cpp:11
+>Line11              cout << improve(mark, highest); 
+
+7.
+(gdb)list
+
+cout << improve(mark, highest);                    │
+│   10              mark = -2; highest = 0;                            │
+│  >11              cout << improve(mark, highest);                    │
+│   12              return 0;                                          │
+│   13           } 
+
+highlighted: cout << improve(mark, highest);       
+
+8.
+(gdb) print highest    
+$1 = 0
+
+9.
+Division by 0, this caused a Floating point exception.
+
+
+
+						1.2
+1.
+g++ -g capture.cpp -o capture.out
+-g:Flag makes code ready to run under a code inspector like gdb or valgrind. It turns on the debugger
+
+
+2.
+valgrind --leak-check=yes ./capture.out
+
+==4477== Memcheck, a memory error detector
+==4477== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==4477== Using Valgrind-3.15.0 and LibVEX; rerun with -h for copyright info
+==4477== Command: ./capture.out
+==4477== 
+==4477== Invalid write of size 4
+==4477==    at 0x10916B: capture() (capture.cpp:4)
+==4477==    by 0x109180: main (capture.cpp:9)
+==4477==  Address 0x4da7ca8 is 0 bytes after a block of size 40 alloc'd
+==4477==    at 0x483C583: operator new[](unsigned long) (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==4477==    by 0x10915E: capture() (capture.cpp:3)
+==4477==    by 0x109180: main (capture.cpp:9)
+==4477== 
+==4477== 
+==4477== HEAP SUMMARY:
+==4477==     in use at exit: 40 bytes in 1 blocks
+==4477==   total heap usage: 2 allocs, 1 frees, 72,744 bytes allocated
+==4477== 
+==4477== 40 bytes in 1 blocks are definitely lost in loss record 1 of 1
+==4477==    at 0x483C583: operator new[](unsigned long) (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==4477==    by 0x10915E: capture() (capture.cpp:3)
+==4477==    by 0x109180: main (capture.cpp:9)
+==4477== 
+==4477== LEAK SUMMARY:
+==4477==    definitely lost: 40 bytes in 1 blocks
+==4477==    indirectly lost: 0 bytes in 0 blocks
+==4477==      possibly lost: 0 bytes in 0 blocks
+==4477==    still reachable: 0 bytes in 0 blocks
+==4477==         suppressed: 0 bytes in 0 blocks
+==4477== 
+==4477== For lists of detected and suppressed errors, rerun with: -s
+==4477== ERROR SUMMARY: 2 errors from 2 contexts (suppressed: 0 from 0)
+
+3.
+The process ID is 4477
+
+4.
+==4477== Invalid write of size 4
+
+5.
+Inside main - line 9, there is a function that is being called, named capture(). The first line of code 
+in the function capture() starts at line 3, going up, we see that the error occurs at line 4 inside the capture() function.
+The Invalid write of size 4 means that we are trying to access memeory that we did not allocate,
+an out of bounds error.
+
+6.
+Size of an int is 4 bytes so 4*10 = 40 bytes
+Does not get deallocated, memory leak
+
+7.
+Deallocate the memory used by malloc
+And instead of explicitly using 10, rather marks[9] as 10 is out of bounds.
+
+
+
+  

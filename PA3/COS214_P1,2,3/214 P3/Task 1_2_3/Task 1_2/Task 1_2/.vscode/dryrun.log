@@ -1,0 +1,18 @@
+make --dry-run --always-make --keep-going --print-directory
+make: Entering directory `/Users/priyul/Desktop/214 P2/Task 1:2'
+g++ -c main.cpp
+g++ -c Confectionery.cpp
+g++ -c Chocolate.cpp
+g++ -c AeratedChocolate.cpp
+g++ -c DairyMilk.cpp
+g++ -c MilkyBar.cpp
+g++ -c Lindor.cpp
+g++ -c DairyMilkBubbly.cpp
+g++ -c Areo.cpp
+g++ -c ConfectioneryFactory.cpp
+g++ -c CadburyFactory.cpp
+g++ -c NestleFactory.cpp
+g++ -c LindtFactory.cpp
+g++ main.o Confectionery.o Chocolate.o AeratedChocolate.o DairyMilk.o MilkyBar.o Lindor.o DairyMilkBubbly.o Areo.o ConfectioneryFactory.o CadburyFactory.o NestleFactory.o LindtFactory.o -o main
+make: Leaving directory `/Users/priyul/Desktop/214 P2/Task 1:2'
+ 
